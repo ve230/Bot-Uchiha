@@ -1,0 +1,31 @@
+const desafios = [
+    { pergunta: "Qual é a capital da França?", resposta: "paris" },
+    { pergunta: "Quantos continentes existem?", resposta: "7" },
+    { pergunta: "Qual é o maior planeta do sistema solar?", resposta: "júpiter" }
+];
+
+let desafiosAtivos = {};
+
+module.exports = {
+    name: "desafio",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const desafio = desafios[Math.floor(Math.random() * desafios.length)];
+        desafiosAtivos[jid] = desafio.resposta.toLowerCase();
+
+        await sock.sendMessage(jid, { text: `❓ Desafio: ${desafio.pergunta}\nResponda com !respostadesafio <resposta>` });
+    }
+};
+
+module.exports.respostadesafio = async (sock, msg, args) => {
+    const jid = msg.key.remoteJid;
+    const resposta = args.join("").toLowerCase();
+    if (!desafiosAtivos[jid]) return;
+
+    if (resposta === desafiosAtivos[jid]) {
+        await sock.sendMessage(jid, { text: "✅ Correto! Você venceu o desafio!" });
+        delete desafiosAtivos[jid];
+    } else {
+        await sock.sendMessage(jid, { text: "❌ Errado, tente novamente!" });
+    }
+};

@@ -1,0 +1,27 @@
+let jogosNumero = {};
+
+module.exports = {
+    name: "adivinhe",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const numero = Math.floor(Math.random()*50)+1;
+        jogosNumero[jid] = numero;
+
+        await sock.sendMessage(jid, { text: "🔢 Adivinhe um número entre 1 e 50! Use !numero <seu chute>" });
+    }
+};
+
+module.exports.numero = async (sock, msg, args) => {
+    const jid = msg.key.remoteJid;
+    const chute = parseInt(args[0]);
+    if (!jogosNumero[jid]) return;
+
+    if (chute === jogosNumero[jid]) {
+        await sock.sendMessage(jid, { text: "🎉 Acertou!" });
+        delete jogosNumero[jid];
+    } else if (chute < jogosNumero[jid]) {
+        await sock.sendMessage(jid, { text: "⬆️ Maior!" });
+    } else {
+        await sock.sendMessage(jid, { text: "⬇️ Menor!" });
+    }
+};

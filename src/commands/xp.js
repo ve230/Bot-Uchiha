@@ -1,34 +1,28 @@
 import { db } from '../config/database.js';
-import { formatXP } from '../utils/helpers.js';
 
 export async function commandXP(sock, message) {
     const userId = message.key.participant || message.key.remoteJid;
+    const remoteJid = message.key.remoteJid;
     const { xp, level } = db.getXP(userId);
-    
-    const xpParaProximo = level * 100;
-    const response = `${formatXP(xp, level)}\n\nXP até o próximo nível: ${xpParaProximo - xp}\n\n💡 Continue conversando para ganhar mais XP!`;
-    
-    await sock.sendMessage(message.key.remoteJid, { text: response });
+    await sock.sendMessage(remoteJid, { text: `📈 Nível: ${level}\n⭐ XP: ${xp}` });
 }
 
 export async function commandRanking(sock, message) {
-    const topUsers = db.getTopUsers(5);
-    
-    let ranking = '🏆 TOP 5 RANKING\n\n';
-    topUsers.forEach((user, index) => {
-        ranking += `${index + 1}️⃣ Nível ${user.level} | ${user.xp} XP\n`;
+    const remoteJid = message.key.remoteJid;
+    const topUsers = db.getTopUsers(10);
+    let response = '🏆 TOP XP:\n\n';
+    topUsers.forEach((user, i) => {
+        response += `${i+1}. Nível ${user.level}\n`;
     });
-    
-    await sock.sendMessage(message.key.remoteJid, { text: ranking });
+    await sock.sendMessage(remoteJid, { text: response });
 }
 
 export async function commandRankingBalance(sock, message) {
-    const topUsers = db.getTopBalance(5);
-    
-    let ranking = '💰 TOP 5 MAIS RICOS\n\n';
-    topUsers.forEach((user, index) => {
-        ranking += `${index + 1}️⃣ ${user.balance.toLocaleString('pt-BR')} moedas\n`;
+    const remoteJid = message.key.remoteJid;
+    const topRich = db.getTopBalance(10);
+    let response = '💰 TOP RICOS:\n\n';
+    topRich.forEach((user, i) => {
+        response += `${i+1}. ${user.balance} moedas\n`;
     });
-    
-    await sock.sendMessage(message.key.remoteJid, { text: ranking });
+    await sock.sendMessage(remoteJid, { text: response });
 }

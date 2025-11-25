@@ -1,0 +1,13 @@
+module.exports = {
+    name: "dadosgrupo",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        try {
+            const metadata = await sock.groupMetadata(jid);
+            const info = `📌 Nome: ${metadata.subject}\n👥 Participantes: ${metadata.participants.length}\n📝 Desc: ${metadata.desc?.toString() || "Sem descrição"}`;
+            await sock.sendMessage(jid, { text: info });
+        } catch {
+            await sock.sendMessage(jid, { text: "❌ Falha ao obter informações." });
+        }
+    }
+};

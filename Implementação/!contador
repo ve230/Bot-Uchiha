@@ -1,0 +1,10 @@
+let contagem = {};
+
+module.exports = {
+    name: "contador",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        contagem[jid] = (contagem[jid] || 0) + 1;
+        await sock.sendMessage(jid, { text: `📝 Mensagens no grupo: ${contagem[jid]}` });
+    }
+};

@@ -1,0 +1,12 @@
+let estatisticas = {};
+
+module.exports = {
+    name: "dadoschat",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        estatisticas[jid] = estatisticas[jid] || { mensagens: 0 };
+        estatisticas[jid].mensagens++;
+
+        await sock.sendMessage(jid, { text: `💬 Total de mensagens no grupo: ${estatisticas[jid].mensagens}` });
+    }
+};

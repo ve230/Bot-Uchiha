@@ -1,0 +1,20 @@
+let xp = {};
+let nivel = {};
+
+module.exports = {
+    name: "xp",
+    execute: async (sock, msg) => {
+        const jid = msg.key.participant || msg.key.remoteJid;
+        xp[jid] = xp[jid] || 0;
+        nivel[jid] = nivel[jid] || 1;
+        await sock.sendMessage(msg.key.remoteJid, { text: `⭐ XP: ${xp[jid]}, Nível: ${nivel[jid]}` });
+    }
+};
+
+module.exports.addXP = (jid, qtd) => {
+    xp[jid] = (xp[jid] || 0) + qtd;
+    if (xp[jid] >= nivel[jid]*100) {
+        nivel[jid]++;
+        xp[jid] = 0;
+    }
+};

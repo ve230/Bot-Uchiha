@@ -1,0 +1,22 @@
+const fetch = require("node-fetch");
+const config = require("../config");
+
+module.exports = {
+    name: "tempo",
+    execute: async (sock, msg, args) => {
+        const jid = msg.key.remoteJid;
+        const cidade = args.join(" ");
+        if (!cidade) return sock.sendMessage(jid, { text: "Use: !tempo <cidade>" });
+
+        try {
+            const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cidade}&appid=${config.openWeatherApiKey}&lang=pt&units=metric`);
+            const data = await res.json();
+            if (data.cod !== 200) return sock.sendMessage(jid, { text: "Cidade não encontrada!" });
+
+            const clima = `🌆 Cidade: ${data.name}\n🌡 Temperatura: ${data.main.temp}°C\n🌬 Vento: ${data.wind.speed} m/s\n☁️ ${data.weather[0].description}`;
+            await sock.sendMessage(jid, { text: clima });
+        } catch {
+            await sock.sendMessage(jid, { text: "❌ Erro ao consultar previsão do tempo." });
+        }
+    }
+};

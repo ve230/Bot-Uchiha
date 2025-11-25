@@ -1,0 +1,17 @@
+let ultimasMensagens = {};
+
+module.exports = {
+    name: "antispam",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const texto = msg.message.conversation || msg.message.extendedTextMessage?.text;
+        ultimasMensagens[jid] = ultimasMensagens[jid] || [];
+
+        if (ultimasMensagens[jid].includes(texto)) {
+            await sock.sendMessage(jid, { text: "⚠️ Mensagem repetida detectada!" });
+        } else {
+            ultimasMensagens[jid].push(texto);
+            if (ultimasMensagens[jid].length > 5) ultimasMensagens[jid].shift();
+        }
+    }
+};

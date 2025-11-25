@@ -1,0 +1,24 @@
+const Jimp = require("jimp");
+
+module.exports = {
+    name: "filtro",
+    execute: async (sock, msg, args) => {
+        const jid = msg.key.remoteJid;
+        const tipo = args[0] || "grayscale";
+
+        if (!msg.message.imageMessage) return sock.sendMessage(jid, { text: "Envie uma imagem!" });
+
+        const buffer = await sock.downloadMediaMessage(msg);
+        const image = await Jimp.read(buffer);
+
+        switch(tipo.toLowerCase()) {
+            case "blur": image.blur(5); break;
+            case "invert": image.invert(); break;
+            case "grayscale": image.grayscale(); break;
+            default: image.grayscale();
+        }
+
+        const outBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
+        await sock.sendMessage(jid, { image: outBuffer });
+    }
+};

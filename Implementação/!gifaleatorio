@@ -1,0 +1,14 @@
+const gifs = [
+    "https://media.giphy.com/media/3o6Zt6ML6BklcajjsA/giphy.gif",
+    "https://media.giphy.com/media/l0HlQ7LRalA7Jd4Tu/giphy.gif",
+    "https://media.giphy.com/media/26u4cqiYI30juCOGY/giphy.gif"
+];
+
+module.exports = {
+    name: "gifaleatorio",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const url = gifs[Math.floor(Math.random() * gifs.length)];
+        await sock.sendMessage(jid, { video: { url }, gifPlayback: true });
+    }
+};

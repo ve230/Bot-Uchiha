@@ -1,22 +1,17 @@
-import { getRandomJoke } from '../utils/jokes.js';
-
 export async function commandPiada(sock, message) {
-    const joke = getRandomJoke();
-    await sock.sendMessage(message.key.remoteJid, { text: joke });
+    const remoteJid = message.key.remoteJid;
+    const piadas = ['😂 Piada 1!', '😂 Piada 2!', '😂 Piada 3!'];
+    await sock.sendMessage(remoteJid, { text: piadas[Math.floor(Math.random() * piadas.length)] });
 }
 
 export async function commandDado(sock, message) {
-    const result = Math.floor(Math.random() * 6) + 1;
-    const emoji = ['🎲', '🎲', '🎲', '🎲', '🎲', '🎲'][result - 1];
-    await sock.sendMessage(message.key.remoteJid, { 
-        text: `${emoji} Você tirou um ${result}!` 
-    });
+    const remoteJid = message.key.remoteJid;
+    const resultado = Math.floor(Math.random() * 6) + 1;
+    await sock.sendMessage(remoteJid, { text: `🎲 ${resultado}` });
 }
 
 export async function commandMoeda(sock, message) {
-    const result = Math.random() < 0.5 ? 'Cara' : 'Coroa';
-    const emoji = result === 'Cara' ? '🪙' : '🪙';
-    await sock.sendMessage(message.key.remoteJid, { 
-        text: `${emoji} Resultado: ${result}!` 
-    });
+    const remoteJid = message.key.remoteJid;
+    const resultado = Math.random() > 0.5 ? 'Cara' : 'Coroa';
+    await sock.sendMessage(remoteJid, { text: `🪙 ${resultado}` });
 }

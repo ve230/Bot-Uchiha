@@ -6,22 +6,15 @@ import { db } from '../config/database.js';
 import { getCommandFromText } from '../utils/helpers.js';
 
 const commands = {
-    // Economy
     'saldo': commandSaldo,
     'transferir': commandTransferir,
     'diario': commandDiario,
-    
-    // XP
     'xp': commandXP,
     'ranking': commandRanking,
     'top-ricos': commandRankingBalance,
-    
-    // Fun
     'piada': commandPiada,
     'dado': commandDado,
     'moeda': commandMoeda,
-    
-    // Info
     'info': commandInfo,
     'ajuda': commandAjuda,
     'ping': async (sock, message) => {
@@ -37,7 +30,6 @@ export async function handleCommand(sock, message) {
     const cmd = getCommandFromText(messageText);
     if (!cmd) return false;
 
-    // Adicionar XP por mensagem
     db.addXP(userId, 5);
 
     const handler = commands[cmd.command];
@@ -47,7 +39,7 @@ export async function handleCommand(sock, message) {
             return true;
         } catch (error) {
             console.error(`Erro ao executar comando ${cmd.command}:`, error);
-            await sock.sendMessage(remoteJid, { text: '❌ Erro ao executar comando!' });
+            await sock.sendMessage(remoteJid, { text: '❌ Erro!' });
             return true;
         }
     }

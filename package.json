@@ -1,1 +1,20 @@
-{\n  "name": "Bot-Uchiha",\n  "version": "1.0.0",\n  "description": "Your project description",\n  "main": "index.js",\n  "scripts": {\n    "test": "echo 'Error: no test specified' && exit 1"\n  },\n  "dependencies": {\n    "@whiskeysockets/baileys": "latest",\n    "qrcode-terminal": "latest",\n    "pino": "latest",\n    "sqlite3": "latest"\n  },\n  "devDependencies": {},\n  "keywords": [],\n  "author": "Author Name",\n  "license": "ISC"\n}
+{
+  "name": "Bot-Uchiha",
+  "version": "1.0.0",
+  "description": "WhatsApp Bot para Termux",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "latest",
+    "qrcode-terminal": "latest",
+    "pino": "latest",
+    "pino-pretty": "latest",
+    "axios": "latest",
+    "dotenv": "latest",
+    "express": "latest",
+    "p-queue": "latest"
+  }
+}

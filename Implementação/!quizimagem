@@ -1,0 +1,30 @@
+const quizzesImg = [
+    { url: "https://i.imgur.com/abcd.jpg", resp: "gato" },
+    { url: "https://i.imgur.com/efgh.jpg", resp: "cachorro" }
+];
+
+let quizAtual = {};
+
+module.exports = {
+    name: "quizimagem",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const q = quizzesImg[Math.floor(Math.random()*quizzesImg.length)];
+        quizAtual[jid] = q.resp;
+
+        await sock.sendMessage(jid, { image: { url: q.url }, caption: "❓ Qual é o animal?" });
+    }
+};
+
+module.exports.resposta = async (sock, msg, args) => {
+    const jid = msg.key.remoteJid;
+    const r = args.join("").toLowerCase();
+    if (!quizAtual[jid]) return;
+
+    if (r === quizAtual[jid]) {
+        await sock.sendMessage(jid, { text: "✅ Acertou!" });
+        delete quizAtual[jid];
+    } else {
+        await sock.sendMessage(jid, { text: "❌ Errado, tente novamente!" });
+    }
+};

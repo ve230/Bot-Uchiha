@@ -1,0 +1,12 @@
+module.exports = {
+    name: "avatar",
+    execute: async (sock, msg, args) => {
+        const jid = args[0] ? args[0].replace("@", "") + "@s.whatsapp.net" : msg.key.participant;
+        try {
+            const foto = await sock.profilePictureUrl(jid);
+            await sock.sendMessage(msg.key.remoteJid, { image: { url: foto } });
+        } catch {
+            await sock.sendMessage(msg.key.remoteJid, { text: "❌ Não foi possível obter a foto." });
+        }
+    }
+};

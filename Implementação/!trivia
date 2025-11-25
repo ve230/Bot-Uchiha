@@ -1,0 +1,32 @@
+const perguntas = [
+    { q: "Capital do Brasil?", r: "Brasília" },
+    { q: "5 + 7 = ?", r: "12" },
+    { q: "Criador do Naruto?", r: "Masashi Kishimoto" }
+];
+
+module.exports = {
+    name: "trivia",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const p = perguntas[Math.floor(Math.random() * perguntas.length)];
+        sock.sendMessage(jid, { text: `❓ Pergunta: ${p.q}\nResponda com !resposta <resposta>` });
+
+        jogosTrivia[jid] = p.r.toLowerCase();
+    }
+};
+
+let jogosTrivia = {};
+
+module.exports.resposta = async (sock, msg, args) => {
+    const jid = msg.key.remoteJid;
+    const resp = args.join(" ").toLowerCase();
+    const correta = jogosTrivia[jid];
+
+    if (!correta) return;
+    if (resp === correta) {
+        await sock.sendMessage(jid, { text: "✅ Correto!" });
+        delete jogosTrivia[jid];
+    } else {
+        await sock.sendMessage(jid, { text: "❌ Errado, tente novamente!" });
+    }
+};

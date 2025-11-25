@@ -1,0 +1,14 @@
+const curiosidades = [
+    "O polvo tem três corações.",
+    "Bananas são berries, mas morangos não.",
+    "O sangue de camarão é azul."
+];
+
+module.exports = {
+    name: "curiosidade",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const fato = curiosidades[Math.floor(Math.random() * curiosidades.length)];
+        await sock.sendMessage(jid, { text: `💡 Curiosidade: ${fato}` });
+    }
+};

@@ -1,0 +1,14 @@
+let aniversarios = {}; // Pode ser salvo em JSON/DB
+
+module.exports = {
+    name: "aniversario",
+    execute: async (sock, msg, args) => {
+        const jid = msg.key.remoteJid;
+        const user = msg.key.participant || jid;
+        const data = args[0]; // formato DD/MM
+
+        if (!data) return sock.sendMessage(jid, { text: "Use: !aniversario DD/MM" });
+        aniversarios[user] = data;
+        await sock.sendMessage(jid, { text: `🎉 Aniversário cadastrado para ${data}` });
+    }
+};

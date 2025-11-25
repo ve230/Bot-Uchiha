@@ -1,0 +1,14 @@
+module.exports = {
+    name: "mencao",
+    execute: async (sock, msg, args) => {
+        const jid = msg.key.remoteJid;
+        const texto = args.join(" ") || "👋 Olá a todos!";
+        try {
+            const metadata = await sock.groupMetadata(jid);
+            const mentions = metadata.participants.map(p => p.id);
+            await sock.sendMessage(jid, { text: texto, mentions });
+        } catch {
+            await sock.sendMessage(jid, { text: "❌ Falha ao mencionar participantes." });
+        }
+    }
+};

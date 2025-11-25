@@ -1,0 +1,33 @@
+let antilinkAtivo = {};
+
+module.exports = {
+    name: "antilink",
+    execute: async (sock, msg, args) => {
+        const jid = msg.key.remoteJid;
+        const acao = args[0] ? args[0].toLowerCase() : "status";
+
+        if (acao === "on") {
+            antilinkAtivo[jid] = true;
+            await sock.sendMessage(jid, { text: "✅ Anti-link ativado!" });
+        } else if (acao === "off") {
+            antilinkAtivo[jid] = false;
+            await sock.sendMessage(jid, { text: "⚠️ Anti-link desativado!" });
+        } else {
+            const status = antilinkAtivo[jid] ? "Ativo" : "Desativado";
+            await sock.sendMessage(jid, { text: `🔗 Anti-link está: ${status}` });
+        }
+    }
+};
+
+// Para monitorar mensagens
+module.exports.verificarLink = async (sock, msg) => {
+    const jid = msg.key.remoteJid;
+    if (!antilinkAtivo[jid]) return;
+    const texto = msg.message.conversation || msg.message.extendedTextMessage?.text;
+    if (!texto) return;
+
+    if (texto.includes("http://") || texto.includes("https://") || texto.includes("wa.me/")) {
+        await sock.sendMessage(jid, { text: `⚠️ Link detectado e bloqueado!` });
+        // Aqui você pode adicionar remoção de mensagem se quiser
+    }
+};

@@ -1,0 +1,9 @@
+module.exports = {
+    name: "grupos",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const grupos = Object.keys(sock.chats || {}).filter(j => j.endsWith("@g.us"));
+        const texto = "📌 Grupos ativos:\n" + grupos.join("\n");
+        await sock.sendMessage(jid, { text: texto });
+    }
+};

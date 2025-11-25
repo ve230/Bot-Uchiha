@@ -1,0 +1,15 @@
+const { Sticker, StickerTypes } = require("wa-sticker-formatter");
+
+module.exports = {
+    name: "stickergif",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        if (!msg.message.videoMessage) return sock.sendMessage(jid, { text: "Envie um vídeo/GIF para criar o sticker!" });
+
+        const buffer = await sock.downloadMediaMessage(msg);
+        const sticker = new Sticker(buffer, { type: StickerTypes.FULL, pack: "Uchiha Bot", author: "Rúben Silver", animated: true });
+        const data = await sticker.toBuffer();
+
+        await sock.sendMessage(jid, { sticker: data });
+    }
+};

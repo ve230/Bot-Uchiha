@@ -1,0 +1,13 @@
+module.exports = {
+    name: "rank",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const ranking = Object.entries(moedas)
+            .sort((a,b) => b[1]-a[1])
+            .slice(0, 10)
+            .map((u,i) => `${i+1}. ${u[0]} - ${u[1]} moedas`)
+            .join("\n");
+
+        await sock.sendMessage(jid, { text: `🏆 Ranking de moedas:\n${ranking}` });
+    }
+};

@@ -1,0 +1,9 @@
+module.exports = {
+    name: "piadaimagens",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const resp = await fetch("https://meme-api.com/gimme");
+        const data = await resp.json();
+        await sock.sendMessage(jid, { image: { url: data.url }, caption: data.title });
+    }
+};

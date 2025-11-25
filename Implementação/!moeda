@@ -1,0 +1,8 @@
+module.exports = {
+    name: "moeda",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const resultado = Math.random() < 0.5 ? "🪙 Cara" : "🪙 Coroa";
+        await sock.sendMessage(jid, { text: `Resultado: ${resultado}` });
+    }
+};

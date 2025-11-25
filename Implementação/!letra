@@ -1,0 +1,31 @@
+module.exports = {
+    name: "letra",
+    execute: async (sock, msg, args) => {
+        const jid = msg.key.remoteJid;
+        const letra = args[0]?.toLowerCase();
+        if (!letra) return sock.sendMessage(jid, { text: "Use: !letra <letra>" });
+
+        const jogo = jogosForca[jid];
+        if (!jogo) return sock.sendMessage(jid, { text: "Nenhum jogo em andamento. Use !forca" });
+
+        let acerto = false;
+        for (let i = 0; i < jogo.palavra.length; i++) {
+            if (jogo.palavra[i] === letra) {
+                jogo.tentativa[i] = letra;
+                acerto = true;
+            }
+        }
+
+        if (!acerto) jogo.erros++;
+        if (jogo.tentativa.join("") === jogo.palavra) {
+            delete jogosForca[jid];
+            return sock.sendMessage(jid, { text: `🎉 Parabéns! Você acertou: ${jogo.palavra}` });
+        }
+        if (jogo.erros >= 6) {
+            delete jogosForca[jid];
+            return sock.sendMessage(jid, { text: `💥 Você perdeu! Palavra: ${jogo.palavra}` });
+        }
+
+        await sock.sendMessage(jid, { text: `Palavra: ${jogo.tentativa.join(" ")}\nErros: ${jogo.erros}/6` });
+    }
+};

@@ -1,0 +1,28 @@
+const fetch = require("node-fetch");
+const config = require("../config");
+
+module.exports = {
+    name: "memegpt",
+    execute: async (sock, msg, args) => {
+        const jid = msg.key.remoteJid;
+        const prompt = args.join(" ");
+        if (!prompt) return sock.sendMessage(jid, { text: "Use: !memegpt <texto do meme>" });
+
+        try {
+            const resp = await fetch("https://api.openai.com/v1/images/generations", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${config.openAiApiKey}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ prompt: prompt + ", meme style", n: 1, size: "512x512" })
+            });
+
+            const data = await resp.json();
+            const url = data.data[0].url;
+            await sock.sendMessage(jid, { image: { url }, caption: prompt });
+        } catch {
+            await sock.sendMessage(jid, { text: "❌ Erro ao gerar meme." });
+        }
+    }
+};

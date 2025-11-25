@@ -1,0 +1,15 @@
+const { xp, nivel } = require("./xp"); // Se você salvou xp.js como módulo
+
+module.exports = {
+    name: "rankingxp",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const ranking = Object.entries(xp)
+            .sort((a,b) => b[1]-a[1])
+            .slice(0,10)
+            .map((u,i) => `${i+1}. ${u[0]} - XP: ${u[1]}, Nível: ${nivel[u[0]] || 1}`)
+            .join("\n");
+
+        await sock.sendMessage(jid, { text: `🏆 Ranking de XP:\n${ranking}` });
+    }
+};

@@ -1,0 +1,14 @@
+let moedas = {};
+
+module.exports = {
+    name: "moedabot",
+    execute: async (sock, msg, args) => {
+        const jid = msg.key.participant || msg.key.remoteJid;
+        moedas[jid] = moedas[jid] || 0;
+        await sock.sendMessage(msg.key.remoteJid, { text: `💰 Você tem ${moedas[jid]} moedas.` });
+    }
+};
+
+module.exports.addMoeda = (jid, quantidade) => {
+    moedas[jid] = (moedas[jid] || 0) + quantidade;
+};

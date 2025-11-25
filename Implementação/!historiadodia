@@ -1,0 +1,10 @@
+module.exports = {
+    name: "historiadodia",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const resp = await fetch("https://history.muffinlabs.com/date");
+        const data = await resp.json();
+        const eventos = data.data.Events.slice(0, 3).map(e => `• ${e.year}: ${e.text}`).join("\n");
+        await sock.sendMessage(jid, { text: `📜 Eventos históricos do dia:\n${eventos}` });
+    }
+};

@@ -1,0 +1,10 @@
+module.exports = {
+    name: "minigame",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const resultado = Math.random();
+        if (resultado < 0.3) await sock.sendMessage(jid, { text: "💥 Você perdeu!" });
+        else if (resultado < 0.7) await sock.sendMessage(jid, { text: "✅ Empate!" });
+        else await sock.sendMessage(jid, { text: "🎉 Você ganhou!" });
+    }
+};

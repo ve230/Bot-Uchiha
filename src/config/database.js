@@ -1,15 +1,8 @@
-// Simulação de banco de dados em memória (você pode integrar MongoDB/Firebase depois)
 class Database {
     constructor() {
         this.users = new Map();
-        this.loadDefaults();
     }
 
-    loadDefaults() {
-        // Dados de exemplo
-    }
-
-    // USUÁRIOS
     getOrCreateUser(userId) {
         if (!this.users.has(userId)) {
             this.users.set(userId, {
@@ -36,7 +29,6 @@ class Database {
         return user;
     }
 
-    // ECONOMIA
     getBalance(userId) {
         const user = this.getOrCreateUser(userId);
         return user.balance;
@@ -57,7 +49,6 @@ class Database {
         return true;
     }
 
-    // XP E NÍVEIS
     getXP(userId) {
         const user = this.getOrCreateUser(userId);
         return { xp: user.xp, level: user.level };
@@ -72,10 +63,9 @@ class Database {
             user.xp = 0;
         }
         this.users.set(userId, user);
-        return { xp: user.xp, level: user.level, leveledUp: user.xp === 0 };
+        return { xp: user.xp, level: user.level };
     }
 
-    // RANKING
     getTopUsers(limit = 10) {
         return Array.from(this.users.values())
             .sort((a, b) => b.xp - a.xp || b.level - a.level)

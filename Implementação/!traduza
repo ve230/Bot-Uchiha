@@ -1,0 +1,13 @@
+module.exports = {
+    name: "traduza",
+    execute: async (sock, msg, args) => {
+        const jid = msg.key.remoteJid;
+        const texto = args.join(" ");
+        if (!texto) return sock.sendMessage(jid, { text: "Use: !traduza <texto>" });
+
+        const resp = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(texto)}&langpair=pt|en`);
+        const data = await resp.json();
+        const traduzido = data.responseData.translatedText;
+        await sock.sendMessage(jid, { text: `🌐 Traduzido: ${traduzido}` });
+    }
+};

@@ -1,0 +1,15 @@
+module.exports = {
+    name: "anticheat",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        const text = msg.message?.conversation || "";
+        const links = /(https?:\/\/\S+)/gi;
+
+        if (links.test(text)) {
+            try {
+                await sock.sendMessage(jid, { text: "❌ Links não são permitidos neste grupo!" });
+                await sock.sendMessage(jid, { delete: { remoteJid: jid, fromMe: false, id: msg.key.id } });
+            } catch {}
+        }
+    }
+};

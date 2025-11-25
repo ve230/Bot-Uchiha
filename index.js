@@ -6,8 +6,6 @@ import makeWASocket, {
 import qrcode from 'qrcode-terminal';
 import P from 'pino';
 import http from 'http';
-import { menuHandler, sendUchihaMenu } from './menu.js';
-import { submenuHandler } from './submenu.js';
 import { handleCommand } from './src/commands/index.js';
 import { db } from './src/config/database.js';
 
@@ -21,7 +19,7 @@ async function connectToWhatsApp() {
 
     const sock = makeWASocket({
         auth: state,
-        printQRInTerminal: false,
+        printQRInTerminal: true,
         logger: P({ level: 'silent' }),
         version: Array.isArray(version) ? version : undefined,
     });
@@ -76,8 +74,6 @@ async function connectToWhatsApp() {
                 await sock.sendMessage(remoteJid, { text: '👁️ Olá! Bem-vindo ao poder Uchiha!\n\nDigite !ajuda para ver todos os comandos ou !menu para o menu interativo.' });
                 break;
             case '!menu':
-                await menuHandler(sock, m);
-                break;
             case '!ajuda':
                 await sendUchihaMenu(sock, remoteJid);
                 break;
@@ -86,7 +82,11 @@ async function connectToWhatsApp() {
             case 'diversao':
             case 'info':
             case 'utilidades':
-                await submenuHandler(sock, m, messageText.toLowerCase().trim());
+                // Adicione o conteúdo para esses casos ou remova-os
+                console.log('Caso não implementado:', messageText);
+                break;
+            default:
+                // Caso padrão opcional
                 break;
         }
     });

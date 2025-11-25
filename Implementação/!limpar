@@ -1,0 +1,8 @@
+module.exports = {
+    name: "limpar",
+    execute: async (sock, msg, args) => {
+        const jid = msg.key.remoteJid;
+        if (!config.vipUsers.includes(msg.key.participant || jid)) return sock.sendMessage(jid, { text: "❌ Acesso negado!" });
+        await sock.sendMessage(jid, { delete: { remoteJid: jid, fromMe: true } });
+    }
+};

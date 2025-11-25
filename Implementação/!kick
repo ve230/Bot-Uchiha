@@ -1,0 +1,18 @@
+module.exports = {
+    name: "kick",
+    execute: async (sock, msg, args) => {
+        const jid = msg.key.remoteJid;
+        if (!msg.key.participant) return;
+        if (!config.vipUsers.includes(msg.key.participant)) return sock.sendMessage(jid, { text: "❌ Apenas VIP/Admin pode usar!" });
+
+        const [user] = args;
+        if (!user) return sock.sendMessage(jid, { text: "Use: !kick @usuário" });
+
+        try {
+            await sock.groupParticipantsUpdate(jid, [user.replace("@", "")], "remove");
+            await sock.sendMessage(jid, { text: `✅ Usuário removido: ${user}` });
+        } catch {
+            await sock.sendMessage(jid, { text: "❌ Falha ao remover o usuário." });
+        }
+    }
+};

@@ -1,0 +1,13 @@
+module.exports = {
+    name: "dadosusuario",
+    execute: async (sock, msg, args) => {
+        const jid = args[0] ? args[0].replace("@","") + "@s.whatsapp.net" : msg.key.participant;
+        try {
+            const vCard = await sock.onWhatsApp(jid);
+            const texto = `📌 Número: ${jid}\n✅ Usuário WhatsApp: ${vCard ? "Existe" : "Não encontrado"}`;
+            await sock.sendMessage(msg.key.remoteJid, { text: texto });
+        } catch {
+            await sock.sendMessage(msg.key.remoteJid, { text: "❌ Não foi possível obter informações do usuário." });
+        }
+    }
+};

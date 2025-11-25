@@ -1,0 +1,16 @@
+const palavras = ["banana", "javascript", "bot", "whatsapp", "uchiha", "naruto"];
+
+let jogosForca = {};
+
+module.exports = {
+    name: "forca",
+    execute: async (sock, msg) => {
+        const jid = msg.key.remoteJid;
+        if (jogosForca[jid]) return sock.sendMessage(jid, { text: "Já existe um jogo em andamento!" });
+
+        const palavra = palavras[Math.floor(Math.random() * palavras.length)];
+        jogosForca[jid] = { palavra, tentativa: Array(palavra.length).fill("_"), erros: 0 };
+
+        await sock.sendMessage(jid, { text: `🎯 Jogo da Forca! Palavra: ${jogosForca[jid].tentativa.join(" ")}` });
+    }
+};
