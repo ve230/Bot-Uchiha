@@ -1,16 +1,1 @@
-{
-  "dependencies": {
-    "axios": "^0.21.1",
-    "ytdl-core": "^4.9.1",
-    "pdf-parse": "^1.1.1",
-    "sharp": "^0.29.3",
-    "better-sqlite3": "^7.4.0",
-    "express": "^4.17.1",
-    "dotenv": "^10.0.0",
-    "translate": "^4.0.1",
-    "sentiment": "^5.0.0",
-    "yt-dlp-exec": "^1.0.3",
-    "p-queue": "^6.6.1",
-    "ffmpeg-static": "^4.4.0"
-  }
-}
+{\n  "name": "Bot-Uchiha",\n  "version": "1.0.0",\n  "description": "Your project description",\n  "main": "index.js",\n  "scripts": {\n    "test": "echo 'Error: no test specified' && exit 1"\n  },\n  "dependencies": {\n    "@whiskeysockets/baileys": "latest",\n    "qrcode-terminal": "latest",\n    "pino": "latest",\n    "sqlite3": "latest"\n  },\n  "devDependencies": {},\n  "keywords": [],\n  "author": "Author Name",\n  "license": "ISC"\n}
